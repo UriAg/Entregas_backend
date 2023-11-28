@@ -1,0 +1,65 @@
+<h2>Products</h2>
+<hr>
+<div>
+
+    <div class="products-container">
+        {{#each responseData.products}}
+            <div class="product-item" onclick=showDetails('{{this._id}}')>
+                <p><b>Id:</b> {{this._id}}</p>
+                <p><b>Product: </b>{{this.title}}</p>
+                <p><b>Category:</b> {{this.category}}</p>
+                <p><b>Stock:</b> {{this.stock}}</p>
+                <p><b>Price:</b> ${{this.price}}</p>
+            </div>
+        {{/each}}
+    </div>
+
+</div>
+<div id="product-details" style="display: none;">
+    
+</div>
+
+<hr>
+
+<div id="pagination">
+    <a href="?page=1">Primera Pág.</a>
+    {{#if responseData.hasPrevPage}}
+        <a href="?page={{responseData.prevPage}}">Prev. Pág.</a>
+    {{else}}
+        <a>Prev. Pág.</a>
+    {{/if}}
+
+    {{#if responseData.hasNextPage}}
+        <a href="?page={{responseData.nextPage}}">Next. Pág.</a>
+    {{else}}
+        <a>Next. Pág.</a>
+    {{/if}}
+    <a href="?page={{responseData.totalPages}}">Ult. Pág.</a>
+</div>
+
+<hr>
+<div id="buttons">
+    <a href="/">
+        <button>Home</button>
+    </a>
+    <hr>
+    <a href="/chat">
+        <button>Chat</button>
+    </a>
+    <hr>
+    <a href="/cart">
+        <button>Cart</button>
+    </a>
+    <hr>
+    <a href="/realTimeProducts">
+        <button>Real Time Products</button>
+    </a>
+
+</div>
+
+<script>
+    function showDetails(id){
+        let url = "/products/"+id;
+        window.location = url
+    }
+</script>

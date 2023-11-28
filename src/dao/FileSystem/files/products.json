@@ -1,0 +1,101 @@
+[
+     {
+          "title": "Laptop HP Pavilion",
+          "description": "Intel Core i5, 8GB RAM, 256GB SSD",
+          "code": "LT-HP-001",
+          "price": 800,
+          "status": true,
+          "thumbnail": "hp-pavilion.jpg",
+          "stock": 20,
+          "category": "Laptops",
+          "id": 1
+     },
+     {
+          "title": "Gaming Mouse Logitech G Pro X",
+          "description": "High-Precision Sensor, Lightweight Design",
+          "price": 59.99,
+          "status": true,
+          "thumbnail": "logitech_gpro.jpg",
+          "code": "MS-LGTCH-002",
+          "stock": 40,
+          "category": "Mice",
+          "id": 2
+     },
+     {
+          "title": "Monitor ASUS ROG Swift 27\"",
+          "description": "1440p, 165Hz, G-Sync",
+          "price": 899.99,
+          "status": true,
+          "thumbnail": "asus_rog_monitor.jpg",
+          "code": "MN-ASUS-003",
+          "stock": 12,
+          "category": "Monitors",
+          "id": 3
+     },
+     {
+          "title": "Mechanical Keyboard Razer BlackWidow V3",
+          "description": "Razer Green Switches, RGB Chroma Lighting",
+          "price": 149.99,
+          "status": true,
+          "thumbnail": "razer_blackwidow.jpg",
+          "code": "KB-RZR-004",
+          "stock": 25,
+          "category": "Keyboards",
+          "id": 4
+     },
+     {
+          "title": "AMD Radeon RX 6700 XT",
+          "description": "12GB GDDR6, Ray Tracing",
+          "code": "GPU-AMD-005",
+          "price": 549,
+          "status": true,
+          "thumbnail": "rx_6700xt.jpg",
+          "stock": 15,
+          "category": "Graphics Cards",
+          "id": 5
+     },
+     {
+          "title": "Laptop Dell XPS 13",
+          "description": "Intel Core i7, 16GB RAM, 512GB SSD",
+          "price": 1299.99,
+          "status": true,
+          "thumbnail": "dell_xps.jpg",
+          "code": "LT-DELL-XPS-006",
+          "stock": 15,
+          "category": "Laptops",
+          "id": 6
+     },
+     {
+          "title": "Gaming Mouse Razer DeathAdder",
+          "description": "High-Precision Sensor, RGB Lighting",
+          "price": 69.99,
+          "status": true,
+          "thumbnail": "razer_mouse.jpg",
+          "code": "MS-RZR-007",
+          "stock": 50,
+          "category": "Mice",
+          "id": 7
+     },
+     {
+          "title": "Monitor LG UltraWide 34\"",
+          "description": "3440x1440 Resolution, IPS Panel",
+          "price": 799.99,
+          "status": true,
+          "thumbnail": "lg_ultrawide.jpg",
+          "code": "MN-LG-008",
+          "stock": 10,
+          "category": "Monitors",
+          "id": 8
+     },
+     {
+          "title": "Teclado mecánico Corsair K70 RGB",
+          "description": "Interruptores Cherry MX Red, retroiluminación RGB",
+          "code": "KB-CRSR-015",
+          "price": 159.99,
+          "status": true,
+          "thumbnail": "corsair_k70.jpg",
+          "stock": 20,
+          "category": "Teclados",
+          "id": 9
+     }
+]

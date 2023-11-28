@@ -1,0 +1,30 @@
+<h1>Login</h1>
+<hr>
+<form action="/api/sessions/login" method="POST">
+
+    {{#if err}}
+        <div>
+            <p>{{errDetail}}</p>
+        </div>
+    {{/if}}
+
+    {{#if createdUser}}
+        <input type="email" placeholder="Enter your email" value='{{userEmail}}' name="email" id="email-input">
+    {{else}}
+        <input type="email" placeholder="Enter your email" name="email" id="email-input">
+    {{/if}}
+
+    <input type="password" placeholder="Enter your password" name="password" id="password-input">
+
+    <input type="submit" value="Login">
+</form>
+<hr>
+<button onclick="redirectGithubRoute()">Login with Github</button>
+
+{{>menu}}
+
+<script>
+    function redirectGithubRoute(){
+        window.location = '/api/sessions/github'
+    }
+</script>

@@ -1,0 +1,42 @@
+<h2>Product Detail</h2>
+<hr>
+<div id="mainProducts">
+
+    <div class="products-container">
+        <div class="product-details-item">
+            <p><b>Id:</b> {{product._id}}</p>
+            <p><b>Product: </b>{{product.title}}</p>
+            <p><b>Category:</b> {{product.category}}</p>
+            <p><b>Price:</b> ${{product.price}}</p>
+            <button class="add-to-cart" onclick="addToCart('{{product._id}}', '1')">Agregar al carrito</button>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+<div id="buttons">
+    <a href="/products">
+        <button>Products</button>
+    </a>
+    <hr>
+    <a href="/">
+        <button>Home</button>
+    </a>
+    <hr>
+    <a href="/chat">
+        <button>Chat</button>
+    </a>
+    <hr>
+    <a href="/cart">
+        <button>Cart</button>
+    </a>
+    <hr>
+    <a href="/realTimeProducts">
+        <button>Real Time Products</button>
+    </a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/assets/scripts/productDetail.js"></script>

@@ -1,0 +1,15 @@
+<div>
+    {{#if message}}
+        <p style="color: green; font-size: 20px;">{{message}}</p>
+    {{/if}}
+    {{#if error}}
+        <p style="color: red; font-size: 20px;">{{error}}</p>
+    {{/if}}
+    <form action="/api/contact" method="POST">
+        <input type="email" name="from" placeholder="From">
+        <input type="email" name="to" placeholder="To">
+        <input type="text" name="subject" placeholder="Subject">
+        <textarea name="message" placeholder="Message"></textarea>
+        <input type="submit" value="Submit">
+    </form>
+</div>

@@ -1,0 +1,55 @@
+<div class="carts-section-container">
+    <h1>Cart</h1>
+    <div class="cart-info-container">
+        {{#if messageSuccess}}
+            <p style="color: green; font-size: 20px;">{{messageSuccess}}</p>
+        {{/if}}
+        {{#if message}}
+            <p style="color: red; font-size: 20px;">{{message}}</p>
+        {{/if}}
+        {{#if modifiedCart.length}}
+            <span><b>Products: </b></span>
+            {{#each modifiedCart}}
+                <ul>
+                    <li>Title: {{this.product.title}}</li>
+                    <li>Quantity: {{this.quantity}}</li>
+                    <li>ID: {{this.product._id}}</li>
+                    {{#if this.stockNotAvailable}}
+                        <li style="color: red; weight:bold">No hay suficiente stock, stock utilizable: {{this.product.stock}}</li>
+                    {{/if}}
+                </ul>
+                
+                <hr>
+            {{/each}}
+        {{else}}
+        <span>Empty cart, let's buy something!</span>
+        {{/if}}
+    </div>
+    <a href="/api/carts/purchase">Comprar</a>
+</div>
+
+<hr>
+<div id="buttons">
+    <a href="/products">
+        <button>Products</button>
+    </a>
+    <hr>
+    <a href="/">
+        <button>Home</button>
+    </a>
+    <hr>
+    <a href="/chat">
+        <button>Chat</button>
+    </a>
+    <hr>
+    <a href="/cart">
+        <button>Cart</button>
+    </a>
+    <hr>
+    <a href="/realTimeProducts">
+        <button>Real Time Products</button>
+    </a>
+
+</div>
+
+{{!-- <script src="/assets/scripts/cartDetail.js"></script> --}}

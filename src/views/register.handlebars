@@ -1,0 +1,33 @@
+<h1>Create your account</h1>
+<hr>
+<form action="/api/sessions/register" method="POST" enctype="application/x-www-form-urlencoded">
+
+    {{#if err}}
+        <div>
+            <p>{{errDetail}}</p>
+        </div>
+    {{/if}}
+
+    <input type="text" placeholder="Enter your name" name="name" id="name-input">
+    <input type="text" placeholder="Enter your last name" name="last_name" id="lastname-input">
+    <input type="email" placeholder="Enter your email" name="email" id="email-input">
+    <select id="role" name="role">
+        <option value="" disabled selected>Select your role</option>
+        <option value="user">user</option>
+        <option value="admin">Admin</option>
+        <option value="creator">creator</option>
+    </select>
+    <input type="password" placeholder="Enter your password" name="password" id="password-input">
+
+    <input type="submit" placeholder="Register">
+</form>
+<hr>
+<button onclick="redirectGithubRoute()">Register with Github</button>
+
+{{>menu}}
+
+<script>
+    function redirectGithubRoute(){
+        window.location = '/api/sessions/github'
+    }
+</script>

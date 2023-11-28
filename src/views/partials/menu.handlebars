@@ -1,0 +1,16 @@
+<div>
+    <ul>
+        {{#if loginVisible}}
+            <li><a href="/login">Login</a></li>
+            <br>
+            <li><a href="/register">Register</a></li>
+            <br>
+        {{else}}
+            <li><a href="/profile">Profile</a></li>
+            <br>
+            <li><a href="/">Home</a></li>
+            <br>
+            <li><a href="/api/sessions/logout">Logout</a></li>
+        {{/if}}
+    </ul>
+</div>

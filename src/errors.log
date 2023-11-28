@@ -1,0 +1,4 @@
+{"level":"error","message":"Test de logger error","timestamp":"2023-11-28T03:47:37.272Z"}
+{"level":"fatal","message":"Test de logger fatal","timestamp":"2023-11-28T03:47:37.275Z"}
+{"level":"error","message":"Test de logger error","timestamp":"2023-11-28T03:47:46.830Z"}
+{"level":"fatal","message":"Test de logger fatal","timestamp":"2023-11-28T03:47:46.831Z"}
