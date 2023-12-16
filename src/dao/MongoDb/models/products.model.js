@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2'
 
 const productsColl='products'
@@ -10,7 +10,8 @@ const productsSchema = new Schema({
     status: Boolean,
     thumbnail: String,
     stock: Number,
-    category: String
+    category: String,
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'users' }
 }, { 
     collection:"products",
     strict: true,

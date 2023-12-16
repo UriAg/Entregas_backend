@@ -1,8 +1,6 @@
-import handleErrors from "../middlewares/errors/handleErrors.js";
-import send from "../services/contact.service.js";
+import { send, transporter } from "../services/contact.service.js";
 
-
-async function makeContact(req,res){
+async function makeContact(req,res, next){
     res.setHeader('Content-Type','application/json');
     let { from, to, subject, message } = req.body;
     try {
@@ -15,7 +13,7 @@ async function makeContact(req,res){
             
     }catch(error) {
         req.logger.error(`Error al enviar el correo, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 

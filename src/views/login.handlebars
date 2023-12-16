@@ -1,10 +1,16 @@
 <h1>Login</h1>
 <hr>
-<form action="/api/sessions/login" method="POST">
+<form action="http://localhost:3000/api/sessions/login" method="POST">
 
     {{#if err}}
         <div>
-            <p>{{errDetail}}</p>
+            <p style="color: red;">{{errDetail}}</p>
+        </div>
+    {{/if}}
+
+    {{#if message}}
+        <div>
+            <p style="color: green;">{{message}}</p>
         </div>
     {{/if}}
 
@@ -20,11 +26,16 @@
 </form>
 <hr>
 <button onclick="redirectGithubRoute()">Login with Github</button>
+<button onclick="recoveryPassword()">Forgot pass?</button>
 
 {{>menu}}
 
 <script>
     function redirectGithubRoute(){
         window.location = '/api/sessions/github'
+    }
+
+    function recoveryPassword(){
+        window.location = '/recoveryPassword'
     }
 </script>

@@ -3,4 +3,9 @@
 <p><b>Name:</b> {{userName}} {{userLastName}}</p>
 <p><b>Email:</b> {{userEmail}}</p>
 <p><b>Role:</b> {{userRole}}</p>
+<br>
+<form action="http://localhost:3000/api/sessions/premium/{{userId}}" method="get">
+<input type="submit" value="Change to premium">
+</form>
+<br>
 {{>menu}}

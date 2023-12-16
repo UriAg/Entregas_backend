@@ -4,11 +4,11 @@ import productController from "../../../controllers/productController.js";
 
 class CustomProductsRouter extends MyRouter{
     init(){
-        this.post('/', ['ADMIN', 'CREATOR'], passportCall('jwt', '/login'), productController.uploadProductToDB)
+        this.post('/', ['PREMIUM', 'ADMIN', 'CREATOR'], passportCall('jwt', '/login'), productController.uploadProductToDB)
 
-        this.put('/:pid', ['ADMIN', 'CREATOR'], passportCall('jwt', '/login'), productController.editProductFromDB)
+        this.put('/:pid', ['PREMIUM', 'ADMIN', 'CREATOR'], passportCall('jwt', '/login'), productController.editProductFromDB)
 
-        this.delete('/:pid', ['ADMIN', 'CREATOR'], passportCall('jwt', '/login'), productController.deleteProductFromDB)
+        this.delete('/:pid', ['PREMIUM', 'ADMIN', 'CREATOR'], passportCall('jwt', '/login'), productController.deleteProductFromDB)
 
         this.get('*', ['PUBLIC'], passportCall('jwt', '/login'), productController.notFound)
     }

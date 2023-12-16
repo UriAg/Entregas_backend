@@ -21,8 +21,8 @@ class ProductsService{
         return await this.dao.updateOne(filter, options)
     }
 
-    async createProduct({title, description, code, price, status=true, thumbnail, stock, category}){
-        return await this.dao.create({title, description, code, price, status, thumbnail, stock, category})
+    async createProduct({title, description, code, price, status=true, thumbnail, stock, category, owner}){
+        return await this.dao.create({title, description, code, price, status, thumbnail, stock, category, owner})
     }
 
     async createManyProducts(products){

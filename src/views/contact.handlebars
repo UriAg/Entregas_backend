@@ -5,7 +5,7 @@
     {{#if error}}
         <p style="color: red; font-size: 20px;">{{error}}</p>
     {{/if}}
-    <form action="/api/contact" method="POST">
+    <form action="http://localhost:3000/api/contact" method="POST">
         <input type="email" name="from" placeholder="From">
         <input type="email" name="to" placeholder="To">
         <input type="text" name="subject" placeholder="Subject">

@@ -40,6 +40,13 @@ class CustomViewsRouter extends MyRouter{
         this.get('/mockingproducts', ['ADMIN', 'CREATOR'], passportCall('jwt', '/login'), viewsController.productMocking)
         
         this.get('/loggerTest', ['PUBLIC'], passportCall('jwt', '/login'), viewsController.loggerTest)
+        
+        this.get('/recoveryPassword', ['PUBLIC'], (req, res, next)=>{
+            if(req.cookies.tokenCookie) return res.status(402).redirect('/');
+            return next()
+        }, viewsController.recoveryPassword)
+        
+        this.get('/reset-password/:token/:email', ['PUBLIC'], viewsController.resetPassword)
 
         this.get('/error', ['PUBLIC'], passportCall('jwt', '/login'), viewsController.notFound)
         

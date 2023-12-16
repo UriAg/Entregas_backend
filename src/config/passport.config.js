@@ -53,10 +53,11 @@ export const initPassport = async ()=>{
                 const createdUser = await userService.createUser({
                     name: name,
                     last_name: last_name,
-                    role: role,
+                    role: role.toUpperCase(),
                     email: email,
                     password: generateHash(password),
-                    cart: createdCart._id
+                    cart: createdCart._id,
+                    token:{info:"", timestamp:0}
                 })
     
                 return done(null, createdUser);

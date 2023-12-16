@@ -96,7 +96,8 @@ const devLogger = winston.createLogger({
         })
     ]
 })
-
+import { cpus } from 'os';
+console.log(cpus().length)
 const prodLogger = winston.createLogger({
     level:'info',
     levels: customLoggerLevels.importanceLevels,

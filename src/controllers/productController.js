@@ -5,9 +5,8 @@ import { IdNotFoundProductError, argsProductError, invalidIdProductError } from 
 import { errorTypes } from "../services/errors/enums.js";
 import productsService from "../services/products.service.js";
 import { isValidObjectId } from "mongoose";
-import handleErrors from "../middlewares/errors/handleErrors.js";
 
-async function uploadProductToDB(req,res){
+async function uploadProductToDB(req, res, next){
     res.setHeader('Content-Type','application/json');
     const {
         title,
@@ -49,24 +48,22 @@ async function uploadProductToDB(req,res){
             status: true,
             thumbnail,
             stock,
-            category
+            category,
+            owner: req.user._id ? req.user._id : "ADMIN"
         })
-
-        await newProduct.save();
 
         let products = await productsService.getProducts()
 
         serverSocket.emit('newProduct', newProduct, products);
 
         return res.status(201).json({ message: 'Producto creado con éxito', product: newProduct });
-
     } catch (error) {
         req.logger.error(`Error al subir producto a la DB, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 
-async function editProductFromDB(req,res){
+async function editProductFromDB(req, res, next){
     res.setHeader('Content-Type','application/json');
     const pid = req.params.pid;
     try {
@@ -91,6 +88,15 @@ async function editProductFromDB(req,res){
             })
         }
 
+        if(productToUpdate.owner.toString() !== req.user._id && req.user.role.toUpperCase() !== "ADMIN" && req.user.role.toUpperCase() !== "CREATOR"){
+            CustomError.createError({
+                name:"Cannot edit this product",
+                cause: "You can't edit this product because you are not the owner",
+                message: 'Error trying to edit product',
+                code: errorTypes.AUTHORIZATION_ERROR 
+            })
+        }
+        
         const {
             title,
             description,
@@ -132,11 +138,11 @@ async function editProductFromDB(req,res){
         return res.status(200).json({ message: 'Producto modificado con éxito', product: productToUpdate });
     } catch (error) {
         req.logger.error(`Error al modificar producto de la DB, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 
-async function deleteProductFromDB(req,res){
+async function deleteProductFromDB(req, res, next){
     res.setHeader('Content-Type','text/html');
     const pid = req.params.pid
     try {
@@ -150,7 +156,7 @@ async function deleteProductFromDB(req,res){
         }
 
         const productToDelete = await productsService.getProductById(pid);
-        console.log(productToDelete)
+
         if (!productToDelete) {
             CustomError.createError({
                 name:"Product doesn't exists",
@@ -159,23 +165,33 @@ async function deleteProductFromDB(req,res){
                 code: errorTypes.NOT_FOUND_ERROR 
             })
         }
-        const deletedProduct = await productsService.deleteProduct(pid);
+        if(productToDelete.owner.toString() !== req.user._id && req.user.role.toUpperCase() !== "ADMIN" && req.user.role.toUpperCase() !== "CREATOR"){
+            CustomError.createError({
+                name:"Cannot delete this product",
+                cause: "You can't delete this product because you are not the owner",
+                message: 'Error trying to delete product',
+                code: errorTypes.AUTHORIZATION_ERROR 
+            })
+        }
+        
+        await productsService.deleteProduct(pid);
 
         const isProductOnCarts = await cartService.getCart({products:{$elemMatch:{product:pid}}})
+
         if(isProductOnCarts){
-            const deleteProductFromCarts = await cartService.updateCarts(
+            await cartService.updateCarts(
                 { products: { $elemMatch: { product: pid } } },
                 { $pull: { products: { product: pid } } }
             );
         }
-
+        
         let products = await productsService.getProducts();
-
+        
         serverSocket.emit('productDeleted', { productId: pid, products });
         return res.status(200).json({ message: 'Producto eliminado con éxito', product: productToDelete, products: products });
     } catch (error) {
         req.logger.error(`Error al eliminar producto de la DB, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 

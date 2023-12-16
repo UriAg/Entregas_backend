@@ -6,6 +6,7 @@ import { IdNotFoundProductError, invalidIdProductError } from "../services/error
 import { errorTypes } from "../services/errors/enums.js";
 import { isValidObjectId } from "mongoose";
 import handleErrors from "../middlewares/errors/handleErrors.js";
+import userService from "../services/users.service.js";
 
 async function renderRegister(req, res){       
     res.setHeader('Content-Type', 'text/html');
@@ -59,26 +60,29 @@ function renderHome(req,res){
     });
 }
 
-function renderProfile(req,res){
+async function renderProfile(req,res){
     res.setHeader('Content-Type', 'text/html');
     
+    const user = await userService.getUserById(req.user._id);
+
     return res.status(200).render('profile', {
         loginVisible:false,
+        userId: req.user._id,
         userName: req.user.name,
         userLastName: req.user.last_name,
-        userRole: req.user.role,
+        userRole: user.role,
         userEmail: req.user.email
     });
 }
 
-async function renderRealTimeProducts(req,res){
+async function renderRealTimeProducts(req, res, next){
     res.setHeader('Content-Type','text/html');
     try{
         const products = await productsService.getProducts();
         return res.status(200).render('realTimeProducts', {products:products});
     } catch {
         req.logger.error(`Error al obtener productos de la DB, detalle: ${error.message}`);
-        next();
+        next(error); 
     }
 }
 
@@ -93,12 +97,14 @@ function renderContactForm(req,res){
     return res.status(200).render('contact', {message, error});
 }
 
-async function renderCart(req, res){
+async function renderCart(req, res, next){
+    res.setHeader('Content-Type','text/html');
     let { message, messageSuccess } = req.query
     try {
         const cart = await cartService.populateCart(req.user.cart, 'products.product')
         let stockNotAvailable = false;
         let modifiedCart = [];
+
         cart.products.forEach(product=>{
             if(product.quantity>product.product.stock){
                 stockNotAvailable = true;
@@ -111,11 +117,11 @@ async function renderCart(req, res){
         return res.status(200).render('cartDetail', { nonCartSelected: false, modifiedCart, message, messageSuccess });
     } catch (error) {
         req.logger.error(`Error al obtener el carrito, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 
-async function renderProducts(req,res){
+async function renderProducts(req ,res, next){
     res.setHeader('Content-Type','text/html');
     const { limit = 10, page = 1, sort='desc', query } = req.query;
 
@@ -151,12 +157,12 @@ async function renderProducts(req,res){
 
     } catch (error) {
         req.logger.error(`Error al obtener productos de la DB, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 
 }
 
-async function renderProductDetails(req,res){
+async function renderProductDetails(req, res, next){
     res.setHeader('Content-Type','text/html');
     let pid = req.params.pid
     try {
@@ -183,11 +189,11 @@ async function renderProductDetails(req,res){
         return res.status(200).render('productDetail', {product: responseData});
     } catch (error) {
         req.logger.error(`Error al obtener producto de la DB, detalle: ${error.message}`);
-        next();    
+        next(error);    
     }
 }
 
-async function productMocking(req,res){
+async function productMocking(req, res, next){
     res.setHeader('Content-Type','text/html');
     try {
         let products = [];
@@ -198,7 +204,7 @@ async function productMocking(req,res){
         return res.status(200).redirect('/?message=products upload successfuly')
     } catch (error) {
         req.logger.error(`Error al subir mock de productos a la DB, detalle: ${error.message}`);
-        next();           
+        next(error);           
     }
 }
 
@@ -213,6 +219,37 @@ async function loggerTest(req, res){
     req.logger.fatal(`Test de logger fatal`);
 
     return res.status(200).send('Loggers enviados!!');
+}
+
+async function recoveryPassword(req, res){
+    res.setHeader('Content-Type','text/html');
+    return res.status(200).render('recoveryPassword');
+}
+
+async function resetPassword(req, res, next){
+    res.setHeader('Content-Type','text/html');
+    const token = req.params.token;
+    const email = req.params.email;
+    const error = req.query.error;
+    try{
+        const user = await userService.getUserByEmail(email)
+        if(token !== user.token.info) return res.status(400).render('login', {err:true, errDetail:"Token isn't the same or the provided token has already been used, please generate another"})
+        
+        const timestamp = user.token.timestamp;
+        const horaActual = Date.now();
+        const limiteDeVida = 60 * 60 * 1000; // 1 hora en milisegundos
+        
+        if (horaActual - timestamp > limiteDeVida) {
+            const filter = { email: email };
+            const update = { $set: { token: {info:"", timestamp:""} } };
+            await userService.updateUser(filter, update);
+            return res.status(200).render('regenerateLink')
+        }
+    
+        return res.status(200).render('changePassword', {email: email, error});
+    }catch(error){
+        next(error)
+    }
 }
 
 function notFound(req, res){
@@ -232,5 +269,7 @@ export default {
     renderProductDetails,
     productMocking,
     loggerTest,
+    recoveryPassword,
+    resetPassword,
     notFound
 }

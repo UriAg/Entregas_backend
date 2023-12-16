@@ -11,7 +11,7 @@ async function searchMessages(req,res){
         
     } catch (error) {
         req.logger.error(`Error al buscar mensajes, detalle: ${error.message}`);
-        next();
+        next(error);
     }
     
 }
@@ -39,7 +39,7 @@ async function uploadMessage(req,res){
 
     } catch (error) {
         req.logger.error(`Error al subir el mensaje a la DB, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 
@@ -55,7 +55,7 @@ async function deleteChat(req,res){
         return res.status(201).json({ message: 'chat deleted'});
     } catch (error) {
         req.logger.error(`Error al eliminar el chat, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 

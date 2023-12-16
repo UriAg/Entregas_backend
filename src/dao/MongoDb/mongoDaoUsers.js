@@ -29,6 +29,10 @@ class MongoDaoUsers{
     async create(user){
         return await usersModel.create(user);
     }
+
+    async updateOne(filter, user){
+        return await usersModel.updateOne(filter, user);
+    }
 }
 
 export default MongoDaoUsers;

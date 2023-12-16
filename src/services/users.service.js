@@ -17,12 +17,16 @@ class UserService{
         return await this.dao.getOne({_id: id});
     }
 
-    async createUser({name, last_name, email, role, password, cart}){
-        return await this.dao.create({name, last_name, email, role, password, cart});
+    async createUser(user){
+        return await this.dao.create(user);
     }
 
-    async createUserWithGithub({name, last_name, email, role, password, cart}){
-        return await this.dao.create({name, last_name, email, role, password, cart});
+    async updateUser(filter, user){
+        return await this.dao.updateOne(filter, user);
+    }
+
+    async createUserWithGithub(user){
+        return await this.dao.create(user);
     }
 }
 

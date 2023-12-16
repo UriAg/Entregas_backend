@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import transporter from "../services/contact.service.js";
+import { transporter } from "../services/contact.service.js";
 import productsService from "../services/products.service.js";
 import cartService from "../services/cart.service.js";
 import ticketService from "../services/ticket.service.js";
@@ -7,10 +7,9 @@ import config from '../config/config.js';
 import { errorTypes } from '../services/errors/enums.js';
 import { isValidObjectId } from 'mongoose';
 import CustomError from '../services/errors/CustomError.js';
-import { invalidIdProductError } from '../services/errors/productErrors.js';
-import handleErrors from '../middlewares/errors/handleErrors.js';
+import { IdNotFoundProductError, invalidIdProductError } from '../services/errors/productErrors.js';
 
-async function addProductToCart(req, res){
+async function addProductToCart(req, res, next){
     res.setHeader('Content-Type','application/json');
     const { pid, pq } = req.params;
     try {
@@ -21,6 +20,25 @@ async function addProductToCart(req, res){
                 cause: invalidIdProductError(pid),
                 message: 'Error trying to find product',
                 code: errorTypes.INVALID_ARGS_ERROR
+            })
+        }
+        const product = await productsService.getProductById(pid);
+
+        if(!product){
+            CustomError.createError({
+                name:"Products doesn't exists",
+                cause: IdNotFoundProductError(pid),
+                message: 'Error trying to find product',
+                code: errorTypes.NOT_FOUND_ERROR 
+            })
+        }
+
+        if(product.owner.toString() === req.user._id){
+            CustomError.createError({
+                name:"Cannot add this product",
+                cause: "You can't add this product to your because you are the owner",
+                message: 'Error trying to add product',
+                code: errorTypes.AUTHENTICATION_ERROR 
             })
         }
 
@@ -49,11 +67,11 @@ async function addProductToCart(req, res){
     
     } catch (error) {
         req.logger.error(`Error al añadir producto al carrito, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 
-async function purchaseCart(req, res){
+async function purchaseCart(req, res, next){
     let outOfStock = [];
     let purchasedProducts = [];
     try {
@@ -147,11 +165,11 @@ async function purchaseCart(req, res){
         
     }catch(error) {
         req.logger.error(`Error al realizar la compra, detalle: ${error.message}`);
-        next();
+        next(error);
     }
 }
 
-async function deleteProductFromCart(req, res){
+async function deleteProductFromCart(req, res, next){
     const pid = req.params.pid;
     try {
         if(!isValidObjectId(pid)){
@@ -191,7 +209,7 @@ async function deleteProductFromCart(req, res){
         return res.status(200).json({ message: 'Producto eliminado del carrito con éxito', cart });
     } catch (error) {
         req.logger.error(`Error al eliminar producto del carrito, detalle: ${error.message}`);
-        next();
+        next(error);
     }    
 }
 

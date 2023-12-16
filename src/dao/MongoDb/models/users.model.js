@@ -16,6 +16,10 @@ const usersModel = mongoose.model('users', new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'carts'
     },
+    token:{
+        info:String,
+        timestamp:Number
+    },
     github:{}
 }, {
     timestamps:true

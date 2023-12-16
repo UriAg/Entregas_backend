@@ -21,4 +21,5 @@ const send=async(from, to, subject, message)=>{
     }).catch(err=>console.log(err));
         
 }
-export default { send, transporter}
+
+export{ send, transporter }
